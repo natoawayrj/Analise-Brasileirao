@@ -1,0 +1,14 @@
+# Jupyter
+.ipynb_checkpoints/
+*.pyc
+__pycache__/
+
+# Claude Code
+.claude/
+
+# Power BI (binário — versionar separado se necessário)
+*.pbix
+
+# Sistema
+.DS_Store
+Thumbs.db
