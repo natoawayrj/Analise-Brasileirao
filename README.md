@@ -1,94 +1,132 @@
 # Análise do Campeonato Brasileiro (2007–2025)
 
-> **v1.0 — Primeira versão.** A estrutura atual é funcional e cobre todos os dashboards, mas está previsto um refatoramento em que o ETL do Jupyter será modularizado com uso de *models*, eliminando a redundância entre notebooks.
+Projeto de engenharia e análise de dados sobre o Campeonato Brasileiro na era dos pontos corridos. O pipeline transforma resultados de partidas em tabelas analíticas consumidas pelo Power BI e avalia a relação entre **valor de mercado do elenco**, desempenho e liderança após a 8ª rodada.
 
-Projeto de análise histórica do Campeonato Brasileiro de Futebol na era dos pontos corridos. Abrange 19 edições (2007–2025), com ETL em Python/Jupyter e visualizações em Power BI.
+> **Nomenclatura.** O arquivo histórico se chama `Investimento.csv`, mas a variável que ele
+> carrega é o **valor de mercado do elenco titular**, não investimento realizado (compras,
+> salários, estrutura). Os dois não são intercambiáveis: um clube pode ter elenco valioso
+> formado na base e gastar pouco. Onde o texto diz "valor de mercado", é isso que está
+> sendo medido.
 
----
+## Dados
 
-## Estrutura do Projeto
+- **Fonte:** *a preencher* — os CSVs em `dados/raw/` foram herdados da primeira versão do
+  projeto sem registro da origem. Antes de citar o projeto em qualquer processo seletivo,
+  confirme o dataset de origem e coloque o link aqui e em `docs/fontes.md`.
+  `dados/raw/Investimento_2025.csv` foi montado manualmente e também precisa de fonte e
+  data de coleta.
+- **Período:** temporadas 2007–2025 do Brasileirão (pontos corridos, 20 clubes, 38 rodadas).
+- **Granularidade:**
+  - `dados/raw/Campeonato.csv` e `campeonato-brasileiro-full.csv` — 1 linha por partida
+  - `campeonato-brasileiro-gols.csv` — 1 linha por gol
+  - `dados/processed/fato_desempenho.csv` — 1 linha por clube por partida
+  - `dados/processed/investimento_vs_desempenho.csv` — 1 linha por clube por temporada
+  - `dados/processed/tese_r8_guardiola.csv` — 1 linha por temporada
+- **Volume:** 8.453 / 9.165 / 10.820 linhas nas fontes brutas; 14.246 linhas na tabela fato;
+  378 pares clube-temporada; 19 temporadas.
+- **Limitações conhecidas:**
+  - **Origem não documentada** (acima) — sem isso, nenhum número aqui é auditável por
+    terceiros.
+  - `valor_mercado` é um retrato do elenco, não um fluxo de gastos. A análise mede
+    **associação**, não causalidade: valor de elenco e título compartilham causas comuns
+    (receita, histórico, gestão, sócio-torcedor).
+  - 19 temporadas é uma amostra pequena para conclusões sobre tendência temporal. Recortes
+    como "antes e depois de 2018" ficam com 11 e 8 temporadas.
+  - 2024 está incompleta na fonte (283 partidas) e fica fora das inferências da tese da
+    8ª rodada.
+  - Não há dados de folha salarial, receita de TV, lesões ou mercado de transferências —
+    o projeto não consegue responder *por que* um clube performa acima do valor do elenco.
 
-```
-Campeonato/
+## Resultados principais
+
+Números reproduzíveis por `python -m src.pipeline` sobre `investimento_vs_desempenho.csv`:
+
+| Recorte | Pearson *r* (valor de mercado × pontos) | IC95% | n (clube-temporada) |
+|---|---|---|---|
+| 2007–2025 | 0,388 | 0,30 – 0,47 | 378 |
+| Até 2017 | 0,567 | 0,47 – 0,65 | 218 |
+| 2018 em diante | 0,423 | 0,29 – 0,54 | 160 |
+
+A associação cai depois de 2018, mas os intervalos de confiança se sobrepõem — a queda
+**não é conclusiva** com esta amostra.
+
+**Campeões e dinheiro:** 14 dos 19 campeões (74%) estavam no G4 de valor de mercado no ano
+do título (coluna `no_g4_financeiro`). Critério explícito: os 4 maiores valores de elenco da
+temporada.
+
+**Tese da 8ª rodada (refutada):** apenas 21% dos líderes após a 8ª rodada terminaram
+campeões. Resultado negativo, reportado como tal.
+
+> Os cartões do `.pbix` exibem `Correlação Geral 0,6404` e `Correlação Pós-2018 0,3771`.
+> Esses valores dependem do estado dos slicers do relatório e não correspondem aos recortes
+> da tabela acima — os números desta seção são os que o pipeline reproduz.
+
+## Estrutura
+
+```text
+Analise-Brasileirao/
 ├── dados/
-│   ├── raw/          # Fontes brutas (Campeonato.csv, gols, mercado)
-│   └── processed/    # Tabelas geradas pelo ETL, consumidas pelo BI
-├── notebooks/        # ETL, análises e scripts auxiliares
-├── bi/               # Dashboard Power BI (verdadeiro.pbix)
-├── img/              # Prints dos dashboards
-└── documentacao.md   # Dicionário de dados completo
+│   ├── raw/                 fontes brutas e valores de mercado de 2025
+│   └── processed/           tabelas geradas pelo pipeline
+├── src/                     ETL, qualidade e estatística
+├── tests/                   testes automatizados
+├── notebooks/               instruções para exploração visual
+├── img/                     imagens dos dashboards
+├── documentacao.md          dicionário de dados
+└── docs/                    desenho e decisões do pipeline
 ```
 
----
+## Executar
+
+Instale as dependências:
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+Para uma execução estrita:
+
+```bash
+python -m src.pipeline
+```
+
+Essa execução interrompe o processo se houver temporada incompleta. Para gerar as saídas disponíveis e marcar as limitações:
+
+```bash
+python -m src.pipeline --allow-incomplete
+```
+
+Os testes podem ser executados com:
+
+```bash
+pytest -q
+```
+
+## Saídas
+
+- `dados/processed/fato_desempenho.csv`: uma linha por clube e partida, com pontos, saldo, acumulados, posição na rodada e indicação de partida realizada.
+- `dados/processed/investimento_vs_desempenho.csv`: desempenho final cruzado com valor médio de mercado.
+- `dados/processed/tese_r8_guardiola.csv`: líder após a 8ª rodada, posição final e validade da inferência.
+
+Os nomes dos três arquivos foram preservados para reduzir o trabalho de atualização no Power BI.
+
+## Limitações conhecidas
+
+- A fonte disponível não possui todos os jogos de 2024; essa temporada é marcada como incompleta e não entra nas inferências da tese da 8ª rodada.
+- A partida Chapecoense × Atlético-MG de 2016 aparece sem placar na fonte. Ela permanece como partida não realizada, sem receber pontos artificialmente.
+- Os valores de mercado de 2025 foram separados em `dados/raw/Investimento_2025.csv` porque foram obtidos manualmente e precisam de uma fonte/data de referência no acompanhamento do projeto.
+- O arquivo `.pbix` não é versionado neste repositório. As medidas e cartões devem ser revisados no Power BI após a atualização dos CSVs.
 
 ## Dashboards
 
-### Página 1 — Números do Campeão
+![Números do campeão](img/pag1.png)
 
-Perfil histórico de cada campeão: pontuação, vitórias, saldo de gols e aproveitamento. Inclui a evolução da posição ao longo das rodadas e os clubes que mais vezes lideraram o campeonato.
+![Investimento vs performance](img/pag2.png)
 
-![Números do Campeão](img/pag1.png)
+![Tese da 8ª rodada](img/pag3.png)
 
----
+## Documentação
 
-### Página 2 — Investimento vs Performance
-
-Analisa a relação entre valor de mercado do elenco e desempenho em campo. Traz correlação de Pearson (geral e por período), percentual de campeões entre os maiores investidores e dispersão entre custo e posição final.
-
-![Investimento vs Performance](img/pag2.png)
-
----
-
-### Página 3 — Tese do Guardiola
-
-Valida empiricamente a afirmação de Pep Guardiola: *"um campeonato se ganha nas últimas 8 rodadas e se perde nas 8 primeiras"*. Testa se o líder após a 8ª rodada converte a vantagem em título, com análise de ruptura pré/pós-2018 e inferência estatística (correlação de Pearson, teste de hipótese).
-
-![Tese do Guardiola](img/pag3.png)
-
----
-
-## Pipeline de Dados
-
-```
-Fontes brutas (raw/)
-    └── ETL (notebooks/UltimateVersion_backup.ipynb)
-            ├── fato_desempenho.csv
-            ├── investimento_vs_desempenho.csv
-            └── tese_r8_guardiola.csv
-                    └── Power BI (bi/verdadeiro.pbix)
-```
-
-### Fontes brutas
-
-| Arquivo | Descrição |
-|---|---|
-| `Campeonato.csv` | Resultados partida a partida (2007–2024) |
-| `campeonato-brasileiro-full.csv` | Dados complementares 2025 |
-| `campeonato-brasileiro-gols.csv` | Gols detalhados 2025 |
-| `Investimento.csv` | Valor de mercado dos elencos por temporada |
-
-### Tabelas processadas
-
-| Arquivo | Dashboard |
-|---|---|
-| `fato_desempenho.csv` | Base geral — desempenho partida a partida |
-| `investimento_vs_desempenho.csv` | Dashboard 2 — Investimento vs Performance |
-| `tese_r8_guardiola.csv` | Dashboard 3 — Tese do Guardiola |
-
----
-
-## Reproduzindo o ETL
-
-1. Clone o repositório
-2. Instale as dependências: `pip install pandas numpy scipy jupyter`
-3. Abra `notebooks/UltimateVersion_backup.ipynb` e execute todas as células
-4. Os CSVs gerados serão salvos em `dados/processed/`
-5. Atualize as fontes de dados no Power BI apontando para `dados/processed/`
-
----
-
-## Tecnologias
-
-- **Python** — pandas, numpy, scipy (ETL e inferência estatística)
-- **Jupyter Notebook** — pipeline de análise
-- **Power BI Desktop** — dashboards e visualizações
+- [Dicionário de dados](documentacao.md)
+- [Fontes e limitações](docs/fontes.md)
+- [Desenho do pipeline](docs/superpowers/specs/2026-07-20-pipeline-brasileirao-design.md)
