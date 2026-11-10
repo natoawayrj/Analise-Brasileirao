@@ -1,132 +1,80 @@
 # Análise do Campeonato Brasileiro (2007–2025)
 
-Projeto de engenharia e análise de dados sobre o Campeonato Brasileiro na era dos pontos corridos. O pipeline transforma resultados de partidas em tabelas analíticas consumidas pelo Power BI e avalia a relação entre **valor de mercado do elenco**, desempenho e liderança após a 8ª rodada.
+![Python](https://img.shields.io/badge/Python-pandas%20%7C%20scipy-3776AB?logo=python&logoColor=white)
+![Power BI](https://img.shields.io/badge/Power%20BI-dashboards-F2C811?logo=powerbi&logoColor=black)
+![Testes](https://img.shields.io/badge/testes-11%20passando-brightgreen)
 
-> **Nomenclatura.** O arquivo histórico se chama `Investimento.csv`, mas a variável que ele
-> carrega é o **valor de mercado do elenco titular**, não investimento realizado (compras,
-> salários, estrutura). Os dois não são intercambiáveis: um clube pode ter elenco valioso
-> formado na base e gastar pouco. Onde o texto diz "valor de mercado", é isso que está
-> sendo medido.
+Pipeline em Python que transforma resultados de partidas do Brasileirão em tabelas analíticas
+consumidas pelo Power BI. Responde a duas perguntas: **elencos mais valiosos terminam mais
+acima na tabela?** e **o líder após a 8ª rodada costuma ser campeão?**
 
-## Dados
+## Demonstração
 
-- **Fonte:** *a preencher* — os CSVs em `dados/raw/` foram herdados da primeira versão do
-  projeto sem registro da origem. Antes de citar o projeto em qualquer processo seletivo,
-  confirme o dataset de origem e coloque o link aqui e em `docs/fontes.md`.
-  `dados/raw/Investimento_2025.csv` foi montado manualmente e também precisa de fonte e
-  data de coleta.
-- **Período:** temporadas 2007–2025 do Brasileirão (pontos corridos, 20 clubes, 38 rodadas).
-- **Granularidade:**
-  - `dados/raw/Campeonato.csv` e `campeonato-brasileiro-full.csv` — 1 linha por partida
-  - `campeonato-brasileiro-gols.csv` — 1 linha por gol
-  - `dados/processed/fato_desempenho.csv` — 1 linha por clube por partida
-  - `dados/processed/investimento_vs_desempenho.csv` — 1 linha por clube por temporada
-  - `dados/processed/tese_r8_guardiola.csv` — 1 linha por temporada
-- **Volume:** 8.453 / 9.165 / 10.820 linhas nas fontes brutas; 14.246 linhas na tabela fato;
-  378 pares clube-temporada; 19 temporadas.
-- **Limitações conhecidas:**
-  - **Origem não documentada** (acima) — sem isso, nenhum número aqui é auditável por
-    terceiros.
-  - `valor_mercado` é um retrato do elenco, não um fluxo de gastos. A análise mede
-    **associação**, não causalidade: valor de elenco e título compartilham causas comuns
-    (receita, histórico, gestão, sócio-torcedor).
-  - 19 temporadas é uma amostra pequena para conclusões sobre tendência temporal. Recortes
-    como "antes e depois de 2018" ficam com 11 e 8 temporadas.
-  - 2024 está incompleta na fonte (283 partidas) e fica fora das inferências da tese da
-    8ª rodada.
-  - Não há dados de folha salarial, receita de TV, lesões ou mercado de transferências —
-    o projeto não consegue responder *por que* um clube performa acima do valor do elenco.
+![Números do campeão](img/pag1.png)
+![Investimento vs performance](img/pag2.png)
+![Tese da 8ª rodada](img/pag3.png)
 
-## Resultados principais
+> As capturas são anteriores à troca da métrica de correlação (ver Funcionalidades) e serão
+> atualizadas.
 
-Números reproduzíveis por `python -m src.pipeline` sobre `investimento_vs_desempenho.csv`:
+## Tecnologias
 
-| Recorte | Pearson *r* (valor de mercado × pontos) | IC95% | n (clube-temporada) |
-|---|---|---|---|
-| 2007–2025 | 0,388 | 0,30 – 0,47 | 378 |
-| Até 2017 | 0,567 | 0,47 – 0,65 | 218 |
-| 2018 em diante | 0,423 | 0,29 – 0,54 | 160 |
+Python (pandas, numpy, scipy), pytest e Power BI Desktop.
 
-A associação cai depois de 2018, mas os intervalos de confiança se sobrepõem — a queda
-**não é conclusiva** com esta amostra.
-
-**Campeões e dinheiro:** 14 dos 19 campeões (74%) estavam no G4 de valor de mercado no ano
-do título (coluna `no_g4_financeiro`). Critério explícito: os 4 maiores valores de elenco da
-temporada.
-
-**Tese da 8ª rodada (refutada):** apenas 21% dos líderes após a 8ª rodada terminaram
-campeões. Resultado negativo, reportado como tal.
-
-> Os cartões do `.pbix` exibem `Correlação Geral 0,6404` e `Correlação Pós-2018 0,3771`.
-> Esses valores dependem do estado dos slicers do relatório e não correspondem aos recortes
-> da tabela acima — os números desta seção são os que o pipeline reproduz.
-
-## Estrutura
+## Arquitetura
 
 ```text
-Analise-Brasileirao/
-├── dados/
-│   ├── raw/                 fontes brutas e valores de mercado de 2025
-│   └── processed/           tabelas geradas pelo pipeline
-├── src/                     ETL, qualidade e estatística
-├── tests/                   testes automatizados
-├── notebooks/               instruções para exploração visual
-├── img/                     imagens dos dashboards
-├── documentacao.md          dicionário de dados
-└── docs/                    desenho e decisões do pipeline
+dados/raw/*.csv  →  python -m src.pipeline  →  dados/processed/*.csv  →  Power BI
 ```
 
-## Executar
+| Pasta | Conteúdo |
+|---|---|
+| `src/` | leitura, normalização, fato, qualidade e estatística |
+| `tests/` | testes automatizados |
+| `dados/` | brutos e processados |
+| `docs/fontes.md` | origem de cada dado e limitações |
+| `documentacao.md` | dicionário de dados |
 
-Instale as dependências:
+## Pré-requisitos e instalação
 
 ```bash
 pip install -r requirements-dev.txt
 ```
 
-Para uma execução estrita:
+## Como executar
 
 ```bash
-python -m src.pipeline
-```
-
-Essa execução interrompe o processo se houver temporada incompleta. Para gerar as saídas disponíveis e marcar as limitações:
-
-```bash
-python -m src.pipeline --allow-incomplete
-```
-
-Os testes podem ser executados com:
-
-```bash
+python -m src.pipeline                      # estrito: falha se houver temporada incompleta
+python -m src.pipeline --allow-incomplete   # gera as saídas e marca as limitações
 pytest -q
 ```
 
-## Saídas
+No Power BI, aponte as três fontes para `dados/processed/` e atualize.
 
-- `dados/processed/fato_desempenho.csv`: uma linha por clube e partida, com pontos, saldo, acumulados, posição na rodada e indicação de partida realizada.
-- `dados/processed/investimento_vs_desempenho.csv`: desempenho final cruzado com valor médio de mercado.
-- `dados/processed/tese_r8_guardiola.csv`: líder após a 8ª rodada, posição final e validade da inferência.
+## Funcionalidades
 
-Os nomes dos três arquivos foram preservados para reduzir o trabalho de atualização no Power BI.
+- **Qualidade de dados:** temporada completa exige 20 clubes, 38 rodadas e 380 jogos com placar.
+  2016 e 2024 ficam fora das inferências.
+- **Valor de mercado × desempenho:** Spearman **dentro de cada temporada** (17 temporadas):
+  ρ médio de **0,67**, e **0,67 até 2017** contra **0,68 de 2018 em diante**. Não há queda
+  depois de 2018.
+- **Por que não Pearson:** a coluna de valor mistura escalas (2023–2024 em milhares; 2025 é valor
+  de elenco em euros), o que distorcia a correlação. Detalhes em `docs/fontes.md`.
+- **Campeões e dinheiro:** 13 de 17 campeões (76%) estavam entre os 4 maiores valores de elenco.
+- **Tese da 8ª rodada:** o líder após a 8ª rodada foi campeão em 4 de 17 temporadas válidas
+  (24%; IC 95% de 10% a 47%). É um sinal fraco, não uma regra; com tão poucas temporadas o
+  intervalo é largo.
 
-## Limitações conhecidas
+Limites: a análise mede associação, não causalidade; a origem de parte dos dados não está
+registrada (`docs/fontes.md`).
 
-- A fonte disponível não possui todos os jogos de 2024; essa temporada é marcada como incompleta e não entra nas inferências da tese da 8ª rodada.
-- A partida Chapecoense × Atlético-MG de 2016 aparece sem placar na fonte. Ela permanece como partida não realizada, sem receber pontos artificialmente.
-- Os valores de mercado de 2025 foram separados em `dados/raw/Investimento_2025.csv` porque foram obtidos manualmente e precisam de uma fonte/data de referência no acompanhamento do projeto.
-- O arquivo `.pbix` não é versionado neste repositório. As medidas e cartões devem ser revisados no Power BI após a atualização dos CSVs.
+## Contribuição
 
-## Dashboards
+Issues e pull requests são bem-vindos. Rode `pytest -q` antes de abrir um PR.
 
-![Números do campeão](img/pag1.png)
+## Autor e licença
 
-![Investimento vs performance](img/pag2.png)
+**Renato Santos** · [GitHub](https://github.com/natoawayrj) ·
+[LinkedIn](https://www.linkedin.com/in/renato-santos-dados/)
 
-![Tese da 8ª rodada](img/pag3.png)
-
-## Documentação
-
-- [Dicionário de dados](documentacao.md)
-- [Fontes e limitações](docs/fontes.md)
-- [Desenho do pipeline](docs/superpowers/specs/2026-07-20-pipeline-brasileirao-design.md)
+Licença: MIT (ver `LICENSE`).
