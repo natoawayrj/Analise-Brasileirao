@@ -14,8 +14,8 @@ acima na tabela?** e **o líder após a 8ª rodada costuma ser campeão?**
 ![Investimento vs performance](img/pag2.png)
 ![Tese da 8ª rodada](img/pag3.png)
 
-> As capturas são anteriores à troca da métrica de correlação (ver Funcionalidades) e serão
-> atualizadas.
+> A captura da Tese da 8ª rodada ainda mostra a base antiga (19 temporadas, 21%) e será
+> atualizada. O número oficial é 4 de 17 (24%).
 
 ## Tecnologias
 
