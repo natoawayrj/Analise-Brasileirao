@@ -1,7 +1,12 @@
 import pandas as pd
 import pytest
 
-from src.statistics import season_spearman, summarize_champions_g4, summarize_rank_correlation
+from src.statistics import (
+    r8_confidence_metrics,
+    season_spearman,
+    summarize_champions_g4,
+    summarize_rank_correlation,
+)
 
 
 def make_investment() -> pd.DataFrame:
@@ -49,3 +54,19 @@ def test_champions_g4_reports_total_and_complete_seasons():
     assert result["campeoes_no_g4_financeiro"] == 2
     assert result["campeoes_temporadas_completas"] == 2
     assert result["campeoes_completas_no_g4_financeiro"] == 2
+
+
+def test_r8_confidence_metrics_handles_pd_na_object_columns():
+    # pd.NA deixa as colunas com dtype object, o que quebra o pearsonr em scipy/numpy recentes.
+    r8 = pd.DataFrame(
+        {
+            "incluida_inferencia": [1, 1, 1, 1, 1, 0],
+            "tese_confirmada": [1, 0, 0, 1, 0, 0],
+            "aproveitamento_r8": pd.Series([0.9, 0.8, 0.75, 0.85, 0.7, pd.NA], dtype=object),
+            "pos_final_lider_r8": pd.Series([1, 3, 5, 1, 2, pd.NA], dtype=object),
+        }
+    )
+    result = r8_confidence_metrics(r8)
+    assert result["ic_prop_lower"] < 40.0 < result["ic_prop_upper"]
+    assert -1.0 <= result["ic_r_lower"] <= result["ic_r_upper"] <= 1.0
+    assert result["ic_pos_lower"] < result["ic_pos_upper"]

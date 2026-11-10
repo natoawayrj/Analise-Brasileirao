@@ -43,6 +43,8 @@ def summarize_r8(r8: pd.DataFrame) -> dict[str, float | int]:
 
 def r8_confidence_metrics(r8: pd.DataFrame) -> dict[str, float]:
     valid = r8[r8["incluida_inferencia"] == 1].copy()
+    for col in ("aproveitamento_r8", "pos_final_lider_r8"):
+        valid[col] = pd.to_numeric(valid[col], errors="coerce").astype(float)
     n = len(valid)
     successes = int(valid["tese_confirmada"].sum()) if n else 0
     prop_lower, prop_upper = wilson_interval(successes, n)
