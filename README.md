@@ -10,12 +10,17 @@ acima na tabela?** e **o líder após a 8ª rodada costuma ser campeão?**
 
 ## Demonstração
 
-![Números do campeão](img/pag1.png)
-![Investimento vs performance](img/pag2.png)
-![Tese da 8ª rodada](img/pag3.png)
+Dashboard em Power BI com três páginas:
 
-> A captura da Tese da 8ª rodada ainda mostra a base antiga (19 temporadas, 21%) e será
-> atualizada. O número oficial é 4 de 17 (24%).
+| Página | O que mostra |
+|---|---|
+| Números do campeão | campeão, pontos, vitórias, saldo e posição rodada a rodada |
+| Valor de Mercado vs Performance | Spearman por período, campeões no top 4 de valor, valor do elenco por time |
+| Tese do Guardiola | líder da 8ª rodada: quantas vezes foi campeão e onde terminou |
+
+![Números do campeão](img/pag1.png)
+![Valor de Mercado vs Performance](img/pag2.png)
+![Tese do Guardiola](img/pag3.png)
 
 ## Tecnologias
 
@@ -32,6 +37,7 @@ dados/raw/*.csv  →  python -m src.pipeline  →  dados/processed/*.csv  →  P
 | `src/` | leitura, normalização, fato, qualidade e estatística |
 | `tests/` | testes automatizados |
 | `dados/` | brutos e processados |
+| `bi/` | `verdadeiro.pbix` e as imagens de fundo das páginas (`fundos/`) |
 | `docs/fontes.md` | origem de cada dado e limitações |
 | `documentacao.md` | dicionário de dados |
 
@@ -49,7 +55,9 @@ python -m src.pipeline --allow-incomplete   # gera as saídas e marca as limita�
 pytest -q
 ```
 
-No Power BI, aponte as três fontes para `dados/processed/` e atualize.
+No Power BI, abra `bi/verdadeiro.pbix`. As consultas apontam para um caminho local: em
+**Transformar dados → Configurações da fonte de dados**, troque pela sua pasta
+`dados/processed/` e clique em **Atualizar**.
 
 ## Funcionalidades
 
@@ -60,12 +68,14 @@ No Power BI, aponte as três fontes para `dados/processed/` e atualize.
   depois de 2018.
 - **Por que não Pearson:** a coluna de valor mistura escalas (2023–2024 em milhares; 2025 é valor
   de elenco em euros), o que distorcia a correlação. Detalhes em `docs/fontes.md`.
-- **Campeões e dinheiro:** 13 de 17 campeões (76%) estavam entre os 4 maiores valores de elenco.
+- **Campeões e valor de mercado:** 13 de 17 campeões (76%) estavam entre os 4 maiores valores
+  de elenco da temporada.
 - **Tese da 8ª rodada:** o líder após a 8ª rodada foi campeão em 4 de 17 temporadas válidas
   (24%; IC 95% de 10% a 47%). É um sinal fraco, não uma regra; com tão poucas temporadas o
-  intervalo é largo.
+  intervalo é largo. Antes de 2018 foram 3 de 10; de 2018 em diante, 1 de 7.
 
-Limites: a análise mede associação, não causalidade; a origem de parte dos dados não está
+Limites: valor de mercado do elenco não é investimento realizado; a análise mede associação,
+não causalidade; a origem de parte dos dados não está
 registrada (`docs/fontes.md`).
 
 ## Contribuição

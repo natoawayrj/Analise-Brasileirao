@@ -19,3 +19,8 @@ TAREFAS.md
 
 # Cópias antigas das saídas (as atuais ficam em dados/processed/)
 notebooks/*.csv
+
+# Rascunhos de trabalho dos fundos (só os PNGs finais vão para o repositório)
+bi/fundos/*.pptx
+bi/fundos/*.pdf
+bi/fundos/fundo_pagina*.png
