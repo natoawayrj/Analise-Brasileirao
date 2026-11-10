@@ -1,20 +1,20 @@
-temporada;lider_r8;pts_r8;aproveitamento_r8;campeao;pos_final_lider_r8;tese_confirmada;periodo;ic_prop_lower;ic_prop_upper;ic_r_lower;ic_r_upper;ic_pos_lower;ic_pos_upper
-2007;Botafogo;17.0;70.83333333333334;São Paulo;9;0;Pre-ruptura (2007-2017);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2008;Flamengo;19.0;79.16666666666666;São Paulo;5;0;Pre-ruptura (2007-2017);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2009;Atlético-MG;17.0;70.83333333333334;Flamengo;7;0;Pre-ruptura (2007-2017);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2010;Corinthians;18.0;75.0;Fluminense;3;0;Pre-ruptura (2007-2017);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2011;Corinthians;20.0;83.33333333333334;Corinthians;1;1;Pre-ruptura (2007-2017);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2012;Atlético-MG;19.0;79.16666666666666;Fluminense;2;0;Pre-ruptura (2007-2017);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2013;Botafogo;16.0;66.66666666666666;Cruzeiro;4;0;Pre-ruptura (2007-2017);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2014;Cruzeiro;16.0;66.66666666666666;Cruzeiro;1;1;Pre-ruptura (2007-2017);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2015;Sport Recife;18.0;75.0;Corinthians;6;0;Pre-ruptura (2007-2017);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2016;Internacional;19.0;79.16666666666666;Palmeiras;17;0;Pre-ruptura (2007-2017);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2017;Corinthians;20.0;83.33333333333334;Corinthians;1;1;Pre-ruptura (2007-2017);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2018;Flamengo;17.0;70.83333333333334;Palmeiras;2;0;Pos-ruptura (2018-2025);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2019;Palmeiras;22.0;91.66666666666666;Flamengo;2;0;Pos-ruptura (2018-2025);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2020;Internacional;17.0;70.83333333333334;Flamengo;2;0;Pos-ruptura (2018-2025);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2021;RB Bragantino;18.0;75.0;Atlético-MG;6;0;Pos-ruptura (2018-2025);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2022;Palmeiras;15.0;62.5;Palmeiras;1;1;Pos-ruptura (2018-2025);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2023;Botafogo;21.0;87.5;Palmeiras;5;0;Pos-ruptura (2018-2025);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2024;Flamengo;17.0;70.83333333333334;Botafogo;5;0;Pos-ruptura (2018-2025);8.5;43.3;-0.4401;0.4681;2.4;6.13
-2025;Palmeiras;19.0;79.16666666666666;Flamengo;2;0;Pos-ruptura (2018-2025);8.5;43.3;-0.4401;0.4681;2.4;6.13
+temporada;lider_r8;pts_r8;aproveitamento_r8;campeao;pos_final_lider_r8;tese_confirmada;periodo;temporada_completa;incluida_inferencia;ic_prop_lower;ic_prop_upper;ic_r_lower;ic_r_upper;ic_pos_lower;ic_pos_upper
+2007;Botafogo;17;70.83333333333334;São Paulo;9;0;Pre-ruptura (2007-2017);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2008;Flamengo;19;79.16666666666666;São Paulo;5;0;Pre-ruptura (2007-2017);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2009;Atlético-MG;17;70.83333333333334;Flamengo;7;0;Pre-ruptura (2007-2017);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2010;Corinthians;18;75.0;Fluminense;3;0;Pre-ruptura (2007-2017);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2011;Corinthians;20;83.33333333333334;Corinthians;1;1;Pre-ruptura (2007-2017);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2012;Atlético-MG;19;79.16666666666666;Fluminense;2;0;Pre-ruptura (2007-2017);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2013;Botafogo;16;66.66666666666666;Cruzeiro;4;0;Pre-ruptura (2007-2017);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2014;Cruzeiro;16;66.66666666666666;Cruzeiro;1;1;Pre-ruptura (2007-2017);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2015;Sport;18;75.0;Corinthians;6;0;Pre-ruptura (2007-2017);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2016;Internacional;19;79.16666666666666;;;;Pre-ruptura (2007-2017);0;0;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2017;Corinthians;20;83.33333333333334;Corinthians;1;1;Pre-ruptura (2007-2017);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2018;Flamengo;17;70.83333333333334;Palmeiras;2;0;Pos-ruptura (2018-2025);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2019;Palmeiras;22;91.66666666666666;Flamengo;3;0;Pos-ruptura (2018-2025);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2020;Internacional;17;70.83333333333334;Flamengo;2;0;Pos-ruptura (2018-2025);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2021;Bragantino;18;75.0;Atlético-MG;6;0;Pos-ruptura (2018-2025);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2022;Palmeiras;15;62.5;Palmeiras;1;1;Pos-ruptura (2018-2025);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2023;Botafogo;21;87.5;Palmeiras;5;0;Pos-ruptura (2018-2025);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2024;Flamengo;17;70.83333333333334;;;;Pos-ruptura (2018-2025);0;0;9.6;47.3;-0.5176;0.4419;2.28;4.78
+2025;Palmeiras;19;79.16666666666666;Flamengo;2;0;Pos-ruptura (2018-2025);1;1;9.6;47.3;-0.5176;0.4419;2.28;4.78
