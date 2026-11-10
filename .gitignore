@@ -6,9 +6,16 @@ __pycache__/
 # Claude Code
 .claude/
 
-# Power BI (binário — versionar separado se necessário)
-*.pbix
-
 # Sistema
 .DS_Store
 Thumbs.db
+
+# Testes
+.pytest_cache/
+
+# Interno (não publicar)
+docs/superpowers/
+TAREFAS.md
+
+# Cópias antigas das saídas (as atuais ficam em dados/processed/)
+notebooks/*.csv
